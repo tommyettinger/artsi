@@ -4,11 +4,12 @@
 <!-- To compile to Gwt, you need to reference this file in your master .gwt.xml
      file (usually called GdxDefinition.gwt.xml) as follows:
 
-     <inherits name="your_library_name" />
+     <inherits name="artsi" />
 	 
 	 (Obviously, change your_library_name to match your project, and change the source path below.)
   -->
 <module>
-    <source path="the.first.package.that.has.code.in.it"/>
+    <source path="com.github.tommyettinger.artsi"/>
     <inherits name="com.badlogic.gdx.backends.gdx_backends_gwt" />
+    <inherits name="jdkgdxds" />
 </module>

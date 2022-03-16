@@ -1,6 +1,6 @@
 package com.github.tommyettinger.artsi;
 
-import com.github.tommyettinger.ds.Select;
+import com.github.tommyettinger.ds.QuickSelect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,12 +58,12 @@ final class BulkLoaders {
         int N2 = (int) Math.ceil((double) N / M);
         int N1 = (int) (N2 * Math.ceil(Math.sqrt(M)));
 
-        QuickSelect.multiSelect(items, left, right, N1, Node2DImpl::compareMinX);
+        QuickSelect.multiSelect(items, Node2DImpl::compareMinX, left, right, N1);
 
         for (int i = left; i <= right; i += N1) {
 
             int right2 = Math.min(i + N1 - 1, right);
-            QuickSelect.multiSelect(items, i, right2, N2, Node2DImpl::compareMinY);
+            QuickSelect.multiSelect(items, Node2DImpl::compareMinY, i, right2, N2);
             for (int j = i; j <= right2; j += N2) {
                 int right3 = Math.min(j + N2 - 1, right2);
                 // pack each entry recursively
@@ -139,7 +139,7 @@ final class BulkLoaders {
      * @return the root node of this subtree
      */
     static Node2DImpl NearestXSorted(int minEntries, int maxEntries, Node2D[] items) {
-        QuickSelect.multiSelect(items, 0, items.length - 1, maxEntries, Comparator.comparingDouble(Node2D::getMidX));
+        QuickSelect.multiSelect(items, Comparator.comparingDouble(Node2D::getMidX), 0, items.length - 1, maxEntries);
         return mergeUpwards(items, maxEntries, 2);
     }
 
@@ -160,12 +160,12 @@ final class BulkLoaders {
         final int m = (int) Math.ceil(Math.sqrt(maxEntries));
         final int N1 = (N2 * m);
 
-        QuickSelect.multiSelect(items, 0, N, N1, Comparator.comparingDouble(Node2D::getMidX));
+        QuickSelect.multiSelect(items, Comparator.comparingDouble(Node2D::getMidX), 0, N, N1);
 
         for (int i = 0; i <= N; i += N1) {
 
             final int right2 = Math.min(i + N1 - 1, N);
-            QuickSelect.multiSelect(items, i, right2, m, Comparator.comparingDouble(Node2D::getMidY));
+            QuickSelect.multiSelect(items, Comparator.comparingDouble(Node2D::getMidY), i, right2, m);
         }
         return mergeUpwards(items, maxEntries, 1);
     }

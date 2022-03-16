@@ -1,8 +1,8 @@
 package com.github.tommyettinger.artsi;
 
+import com.github.tommyettinger.ds.ObjectList;
 import com.github.tommyettinger.ds.support.BitConversion;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,7 +12,7 @@ public abstract class Node2D {
     int height;
     final boolean leaf;
 
-    final List<Node2D> children;
+    final ObjectList<Node2D> children;
 
     /**
      * Create a leaf node
@@ -26,9 +26,9 @@ public abstract class Node2D {
         this.children = null;
     }
 
-    protected Node2D(List<Node2D> children, boolean isLeaf) {
-        this.leaf = isLeaf;
+    protected Node2D(ObjectList<Node2D> children, boolean isLeaf) {
         this.children = children;
+        this.leaf = isLeaf;
     }
 
     /**
@@ -36,15 +36,12 @@ public abstract class Node2D {
      *
      * @param children the children to initialize with (if {@code null}, assumed to be an orphaned node)
      */
-    protected Node2D(List<Node2D> children) {
+    protected Node2D(ObjectList<Node2D> children) {
         this(children, children == null);
     }
 
     protected Node2D(Node2D... nodes) {
-        this.children = new ArrayList<>(nodes.length);
-        for (final Node2D n : nodes) {
-            children.add(n);
-        }
+        this.children = ObjectList.with(nodes);
         leaf = false;
     }
 

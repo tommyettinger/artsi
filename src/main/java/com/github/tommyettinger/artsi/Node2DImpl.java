@@ -1,5 +1,7 @@
 package com.github.tommyettinger.artsi;
 
+import com.github.tommyettinger.ds.ObjectList;
+
 import java.util.List;
 
 /**
@@ -25,7 +27,7 @@ class Node2DImpl extends Node2D {
         set(minX, minY, maxX, maxY);
     }
 
-    Node2DImpl(List<Node2D> children) {
+    Node2DImpl(ObjectList<Node2D> children) {
         super(children);
     }
 

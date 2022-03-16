@@ -1,6 +1,14 @@
 package com.github.tommyettinger.artsi;
 
-import java.util.*;
+import com.github.tommyettinger.ds.ObjectDeque;
+import com.github.tommyettinger.ds.ObjectList;
+
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.SortedSet;
 import java.util.function.Predicate;
 
 import static com.github.tommyettinger.artsi.Node2D.distBBox;
@@ -356,7 +364,7 @@ public class RTree<T extends Node2D> {
     @SuppressWarnings("unchecked")
     public Iterable<T> leaves() {
         return () -> new Iterator<T>() {
-            private final Stack<Node2D> stack = new Stack<>();
+            private final ObjectDeque<Node2D> stack = new ObjectDeque<>();
 
             {
                 stack.add(root);
@@ -397,14 +405,14 @@ public class RTree<T extends Node2D> {
      * @return a list of the leaf nodes in the tree
      */
     public List<? extends T> getLeaves() {
-        return traversal.getLeaves(root, new ArrayList<>(size()));
+        return traversal.getLeaves(root, new ObjectList<>(size()));
     }
 
     /**
      * Remove all the elements from the tree
      */
     public void clear() {
-        this.root = new Node2DImpl(new ArrayList<>(minEntries));
+        this.root = new Node2DImpl(new ObjectList<>(minEntries));
         root.height = 0;
         numData = 0;
     }
@@ -513,7 +521,7 @@ public class RTree<T extends Node2D> {
         return out;
     }
 
-    private Node2D chooseSubtree(Node2D bbox, Node2D node, int level, List<Node2D> path) {
+    private Node2D chooseSubtree(Node2D bbox, Node2D node, int level, ObjectDeque<Node2D> path) {
         while (true) {
             path.add(node);
             if (node.leaf || path.size() - 1 == level) {
@@ -551,7 +559,7 @@ public class RTree<T extends Node2D> {
     }
 
     private void put(Node2D item, int level) {
-        final List<Node2D> insertPath = new LinkedList<>();
+        final ObjectDeque<Node2D> insertPath = new ObjectDeque<>();
         final Node2D node;
         // find the best node for accommodating the item, saving all nodes along the path too
         if (level == -1) {
@@ -584,7 +592,7 @@ public class RTree<T extends Node2D> {
     }
 
     // split overflowed node into two
-    private void split(List<Node2D> insertPath, int level) {
+    private void split(ObjectDeque<Node2D> insertPath, int level) {
         final Node2D node = insertPath.get(level);
         int M = node.children.size();
         int m = this.minEntries;
@@ -593,7 +601,8 @@ public class RTree<T extends Node2D> {
 
         int splitIndex = chooseSplitIndex(node, m, M);
 
-        final Node2D newNode = new Node2DImpl(splice(new ArrayList<>(minEntries), node.children, splitIndex, node.children.size() - splitIndex));
+        final Node2D newNode = new Node2DImpl(new ObjectList<>(node.children, splitIndex, node.children.size() - splitIndex));
+        node.children.removeRange(splitIndex, node.children.size());
         newNode.height = node.height;
 
         node.recalculateBBox();
@@ -613,7 +622,7 @@ public class RTree<T extends Node2D> {
      * @param newNode the other new child of the root
      */
     private void splitRoot(Node2D node, Node2D newNode) {
-        final List<Node2D> children = new ArrayList<>(minEntries);
+        final ObjectList<Node2D> children = new ObjectList<>(minEntries);
         children.add(node);
         children.add(newNode);
         this.root = new Node2DImpl(children);

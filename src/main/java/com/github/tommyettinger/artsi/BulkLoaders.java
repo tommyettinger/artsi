@@ -1,8 +1,8 @@
 package com.github.tommyettinger.artsi;
 
+import com.github.tommyettinger.ds.ObjectList;
 import com.github.tommyettinger.ds.QuickSelect;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -50,7 +50,7 @@ final class BulkLoaders {
 
         }
 
-        node = new Node2DImpl(new ArrayList<>(minEntries));
+        node = new Node2DImpl(new ObjectList<>(minEntries));
         node.height = height;
 
         // split the items into M mostly square tiles
@@ -189,7 +189,7 @@ final class BulkLoaders {
 
         final Node2D[] merged = new Node2D[(int) Math.ceil((double) items.length / maxEntries)];
         for (int i = 0, j = 0; i < items.length; i += maxEntries) {
-            final List<Node2D> children = new ArrayList<>(maxEntries);
+            final ObjectList<Node2D> children = new ObjectList<>(maxEntries);
             for (int k = 0; k < maxEntries; ++k) {
                 int l = i + k;
                 if (l >= items.length) {

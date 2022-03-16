@@ -1,8 +1,9 @@
 package com.github.tommyettinger.artsi;
 
+import com.github.tommyettinger.ds.ObjectDeque;
+
 import java.util.Collection;
 import java.util.List;
-import java.util.Stack;
 import java.util.function.Predicate;
 
 /**
@@ -127,7 +128,7 @@ public abstract class TreeTraversal {
         @Override
         @SuppressWarnings("unchecked")
         <T extends Node2D> List<? extends T> getLeaves(Node2D root, List<T> result) {
-            final Stack<Node2D> nodesToSearch = new Stack<>();
+            final ObjectDeque<Node2D> nodesToSearch = new ObjectDeque<>();
             while (root != null) {
                 if (root.leaf) {
                     result.add((T) root);
@@ -147,7 +148,7 @@ public abstract class TreeTraversal {
                 return false;
             }
 
-            final Stack<Node2D> nodesToSearch = new Stack<>();
+            final ObjectDeque<Node2D> nodesToSearch = new ObjectDeque<>();
             while (node != null) {
                 if (node.intersects(minX, minY, maxX, maxY)) {
                     if (node.leaf) {
@@ -164,7 +165,7 @@ public abstract class TreeTraversal {
         @Override
         @SuppressWarnings("unchecked")
         <T extends Node2D> void traverse(Node2D root, Predicate<Node2D> nodePredicate, Predicate<T> leafPredicate) {
-            final Stack<Node2D> nodesToSearch = new Stack<>();
+            final ObjectDeque<Node2D> nodesToSearch = new ObjectDeque<>();
             nodesToSearch.add(root);
             while (!nodesToSearch.isEmpty()) {
                 Node2D node = nodesToSearch.pop();
@@ -186,7 +187,7 @@ public abstract class TreeTraversal {
             if (!root.intersects(minX, minY, maxX, maxY)) {
                 return out;
             }
-            final Stack<Node2D> nodesToSearch = new Stack<>();
+            final ObjectDeque<Node2D> nodesToSearch = new ObjectDeque<>();
             nodesToSearch.add(root);
             while (!nodesToSearch.isEmpty()) {
                 Node2D node = nodesToSearch.pop();

@@ -1,7 +1,7 @@
 package com.github.tommyettinger.artsi;
 
 /**
- * A Rectangular node
+ * A node that has data associated with one point.
  *
  * @param <T> the type of data in the leaf node
  */

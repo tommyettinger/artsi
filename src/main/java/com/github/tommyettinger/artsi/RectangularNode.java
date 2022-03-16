@@ -1,8 +1,8 @@
 package com.github.tommyettinger.artsi;
 
 /**
- * A rectangular node
- * @param <T> the tyoe of the data in the node
+ * A rectangular node.
+ * @param <T> the type of the data in the node
  */
 public class RectangularNode<T> extends Node2DImpl {
     /**

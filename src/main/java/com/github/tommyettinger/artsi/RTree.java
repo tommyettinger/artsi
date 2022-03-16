@@ -317,14 +317,14 @@ public class RTree<T extends Node2D> {
      * @param nodePredicate the function to apply to internal nodes
      * @param leafFunction  the function to apply to leaf nodes
      * @param sort          the comparator used to sort the data
-     * @return an iterable of the matching data (these will most likely be {@link SortedSet})
+     * @return the T item that sorts as having the lowest value, or null if no leaf nodes were accepted
      */
     @SuppressWarnings("unchecked")
     public T findNearest(Predicate<Node2D> nodePredicate, Predicate<Node2D> leafFunction, Comparator<T> sort) {
         final Object[] out = new Object[1];
         traverse(nodePredicate, l -> {
             if (leafFunction.test(l)) {
-                if (out[0] == null || sort.compare((T) out[0], l) < 0) {
+                if (out[0] == null || sort.compare((T) out[0], l) > 0) {
                     out[0] = l;
                 }
             }
@@ -340,14 +340,14 @@ public class RTree<T extends Node2D> {
      * @param nodePredicate the function to apply to internal nodes
      * @param leafFunction  the function to apply to leaf nodes
      * @param sort          the comparator used to sort the data
-     * @return an iterable of the matching data (these will most likely be {@link SortedSet})
+     * @return the T item that sorts as having the highest value, or null if no leaf nodes were accepted
      */
     @SuppressWarnings("unchecked")
     public T findFurthest(Predicate<Node2D> nodePredicate, Predicate<T> leafFunction, Comparator<T> sort) {
         final Object[] out = new Object[1];
         traverse(nodePredicate, l -> {
             if (leafFunction.test(l)) {
-                if (out[0] == null || sort.compare((T) out[0], l) > 0) {
+                if (out[0] == null || sort.compare((T) out[0], l) < 0) {
                     out[0] = l;
                 }
             }

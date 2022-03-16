@@ -3,11 +3,7 @@ package com.github.tommyettinger.artsi;
 import com.github.tommyettinger.ds.ObjectDeque;
 import com.github.tommyettinger.ds.ObjectList;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static com.github.tommyettinger.artsi.Node2D.distBBox;
@@ -120,8 +116,8 @@ public class RTree<T extends Node2D> {
      * @return a list of the items that intersect the bounds
      */
 
-    public List<? extends T> search(float minX, float minY, float maxX, float maxY) {
-        return traversal.search(root, new LinkedList<>(), minX, minY, maxX, maxY);
+    public ObjectDeque<? extends T> search(float minX, float minY, float maxX, float maxY) {
+        return traversal.search(root, new ObjectDeque<>(), minX, minY, maxX, maxY);
     }
 
     /**
@@ -285,10 +281,10 @@ public class RTree<T extends Node2D> {
      *
      * @param nodePredicate the function to apply to internal nodes
      * @param leafFunction  the function to apply to leaf nodes
-     * @return an iterable of the matching data (these will most likely be {@link LinkedList})
+     * @return an iterable of the matching data (these will most likely be {@link ObjectDeque})
      */
-    public List<? extends T> findAll(Predicate<Node2D> nodePredicate, Predicate<T> leafFunction) {
-        return findAll(new LinkedList<>(), nodePredicate, leafFunction);
+    public ObjectDeque<? extends T> findAll(Predicate<Node2D> nodePredicate, Predicate<T> leafFunction) {
+        return findAll(new ObjectDeque<>(), nodePredicate, leafFunction);
     }
 
     /**
@@ -298,7 +294,7 @@ public class RTree<T extends Node2D> {
      * @param nodePredicate the function to apply to internal nodes
      * @param leafFunction  the function to apply to leaf nodes
      * @param <S>           the type of the collection
-     * @return an iterable of the matching data (these will most likely be {@link LinkedList})
+     * @return an iterable of the matching data (these will most likely be {@link ObjectDeque})
      */
     public <S extends Collection<T>> S findAll(S out, Predicate<Node2D> nodePredicate, Predicate<T> leafFunction) {
         traverse(nodePredicate, l -> {

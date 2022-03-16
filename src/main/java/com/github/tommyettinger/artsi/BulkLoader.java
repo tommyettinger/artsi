@@ -11,7 +11,7 @@ public enum BulkLoader {
      */
     NEAREST_X(BulkLoaders::NearestXSorted),
     /**
-     * Sort the leaves by index of hHilbert curve and merge upwards
+     * Sort the leaves by index of Hilbert curve and merge upwards
      */
     HILBERT_SORTED(BulkLoaders::HilbertSorted),
     /**

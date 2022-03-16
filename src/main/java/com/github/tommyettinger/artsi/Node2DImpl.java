@@ -9,10 +9,10 @@ import java.util.List;
  */
 class Node2DImpl extends Node2D {
 
-    double minX = Double.POSITIVE_INFINITY;
-    double minY = Double.POSITIVE_INFINITY;
-    double maxX = Double.NEGATIVE_INFINITY;
-    double maxY = Double.NEGATIVE_INFINITY;
+    double minX = Double.MAX_VALUE;
+    double minY = Double.MAX_VALUE;
+    double maxX = -Double.MAX_VALUE;
+    double maxY = -Double.MAX_VALUE;
 
     /**
      * Create a rectangular data node

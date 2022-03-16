@@ -161,7 +161,7 @@ public abstract class Node2D {
     // min bounding rectangle of node children from k to p-1
     static Node2D distBBox(Node2D node, int k, int p, Node2D destNode) {
         if (destNode == null) {
-            destNode = new Node2DImpl((List<Node2D>) null);
+            destNode = new Node2DImpl((ObjectList<Node2D>) null);
         }
         destNode.set(
                 Double.POSITIVE_INFINITY,

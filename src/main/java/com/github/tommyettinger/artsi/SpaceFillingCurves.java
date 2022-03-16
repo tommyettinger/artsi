@@ -6,7 +6,7 @@ package com.github.tommyettinger.artsi;
  * Much of the code is from https://github.com/rawrunprotected/hilbert_curves.
  * <p>
  * Decoding the curves can either be performed using the {@link #decodeHilbert} or {@link #decodePackedHilbert} methods. The advantage
- * of the former is that it avoids having to create an array, instead packing the value in a long. This can then be
+ * of the former is that it avoids having to create an array, instead packing the value in an int. This can then be
  * extracted using the {@link #getX} and {@link #getY} methods.
  */
 public final class SpaceFillingCurves {
@@ -16,28 +16,28 @@ public final class SpaceFillingCurves {
 
     /**
      * @param decoded the decoded value
-     * @return the left hand part of a long
+     * @return the left-hand part of an int
      */
-    public static int getX(long decoded) {
-        return (int) (decoded >> 16);
+    public static int getX(int decoded) {
+        return decoded >>> 16;
     }
 
     /**
      * @param decoded the decoded value
-     * @return the right hand part of a long
+     * @return the right-hand part of an int
      */
-    public static int getY(long decoded) {
-        return (int) (decoded & ((1 >> 16) | 0xff));
+    public static int getY(int decoded) {
+        return decoded & 0xFFFF;
     }
 
     /**
-     * Decode the encoded value to a packed long (where the left-hand bits are the x
-     * component and the right hand bits are the y component
+     * Decode the encoded value to a packed int (where the left-hand bits are the x
+     * component and the right-hand bits are the y component
      *
      * @param encoded the encoded value
-     * @return a packed long containing the decoded values
+     * @return a packed int containing the decoded values
      */
-    public static long decodePackedHilbert(int encoded) {
+    public static int decodePackedHilbert(int encoded) {
 
         int i0 = deinterleave(encoded);
         int i1 = deinterleave(encoded >> 1);
@@ -50,7 +50,7 @@ public final class SpaceFillingCurves {
 
         int a = (((i0 ^ 0xFFFF) & prefixT1) | (i0 & prefixT0));
 
-        long x = (a ^ i1);
+        int x = (a ^ i1);
         x <<= 16;
         x |= (a ^ i0 ^ i1);
         return x;
@@ -182,12 +182,12 @@ public final class SpaceFillingCurves {
     }
 
     /**
-     * Decode a Morton-encoded index to a packed long (left hand bits are x, right hand bits are x)
+     * Decode a Morton-encoded index to a packed int (left hand bits are x, right hand bits are x)
      *
      * @param encoded the morton-encoded index
-     * @return the x,y coordinate as a packed long
+     * @return the x,y coordinate as a packed int
      */
-    public static long decodePackedMorton(int encoded) {
+    public static int decodePackedMorton(int encoded) {
         int i = deinterleave(encoded);
         i <<= 16;
         i |= deinterleave(encoded >> 1);

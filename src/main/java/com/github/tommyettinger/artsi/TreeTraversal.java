@@ -46,7 +46,7 @@ public abstract class TreeTraversal {
 
         }
 
-        private boolean collides0(double minX, double minY, double maxX, double maxY, Node2D node) {
+        private boolean collides0(float minX, float minY, float maxX, float maxY, Node2D node) {
             if (node == null) {
                 return false;
             }
@@ -65,7 +65,7 @@ public abstract class TreeTraversal {
         }
 
         @Override
-        boolean collides(Node2D root, double minX, double minY, double maxX, double maxY) {
+        boolean collides(Node2D root, float minX, float minY, float maxX, float maxY) {
             if (!root.intersects(minX, minY, maxX, maxY)) {
                 return false;
             }
@@ -96,7 +96,7 @@ public abstract class TreeTraversal {
 
 
         @SuppressWarnings("unchecked")
-        private <T extends Node2D, S extends Collection<T>> S search0(double minX, double minY, double maxX, double maxY, Node2D node, S results) {
+        private <T extends Node2D, S extends Collection<T>> S search0(float minX, float minY, float maxX, float maxY, Node2D node, S results) {
             if (node == null) {
                 return results;
             }
@@ -113,7 +113,7 @@ public abstract class TreeTraversal {
         }
 
         @Override
-        <T extends Node2D, S extends Collection<T>> S search(Node2D root, S out, double minX, double minY, double maxX, double maxY) {
+        <T extends Node2D, S extends Collection<T>> S search(Node2D root, S out, float minX, float minY, float maxX, float maxY) {
             if (!root.intersects(minX, minY, maxX, maxY)) {
                 return out;
             }
@@ -142,7 +142,7 @@ public abstract class TreeTraversal {
         }
 
         @Override
-        boolean collides(Node2D root, double minX, double minY, double maxX, double maxY) {
+        boolean collides(Node2D root, float minX, float minY, float maxX, float maxY) {
             Node2D node = root;
             if (!node.intersects(minX, minY, maxX, maxY)) {
                 return false;
@@ -183,7 +183,7 @@ public abstract class TreeTraversal {
 
         @Override
         @SuppressWarnings("unchecked")
-        <T extends Node2D, S extends Collection<T>> S search(Node2D root, S out, double minX, double minY, double maxX, double maxY) {
+        <T extends Node2D, S extends Collection<T>> S search(Node2D root, S out, float minX, float minY, float maxX, float maxY) {
             if (!root.intersects(minX, minY, maxX, maxY)) {
                 return out;
             }
@@ -207,10 +207,10 @@ public abstract class TreeTraversal {
 
     abstract <T extends Node2D> List<? extends T> getLeaves(Node2D root, List<T> result);
 
-    abstract boolean collides(Node2D root, double minX, double minY, double maxX, double maxY);
+    abstract boolean collides(Node2D root, float minX, float minY, float maxX, float maxY);
 
     abstract <T extends Node2D> void traverse(Node2D root, Predicate<Node2D> nodePredicate, Predicate<T> leafPredicate);
 
-    abstract <T extends Node2D, S extends Collection<T>> S search(Node2D root, S out, double minX, double minY, double maxX, double maxY);
+    abstract <T extends Node2D, S extends Collection<T>> S search(Node2D root, S out, float minX, float minY, float maxX, float maxY);
 
 }

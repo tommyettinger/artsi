@@ -8,7 +8,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedSet;
 import java.util.function.Predicate;
 
 import static com.github.tommyettinger.artsi.Node2D.distBBox;
@@ -41,7 +40,7 @@ public class RTree<T extends Node2D> {
         }
 
         @Override
-        public boolean remove(double minX, double minY, double maxX, double maxY, Predicate<T> equalsFn) {
+        public boolean remove(float minX, float minY, float maxX, float maxY, Predicate<T> equalsFn) {
             return false;
         }
 
@@ -109,7 +108,7 @@ public class RTree<T extends Node2D> {
      * @param maxY the maximum y component
      * @return if any of the items in the Rtree intersect the bounds
      */
-    public boolean collides(double minX, double minY, double maxX, double maxY) {
+    public boolean collides(float minX, float minY, float maxX, float maxY) {
         return traversal.collides(root, minX, minY, maxX, maxY);
     }
 
@@ -121,7 +120,7 @@ public class RTree<T extends Node2D> {
      * @return a list of the items that intersect the bounds
      */
 
-    public List<? extends T> search(double minX, double minY, double maxX, double maxY) {
+    public List<? extends T> search(float minX, float minY, float maxX, float maxY) {
         return traversal.search(root, new LinkedList<>(), minX, minY, maxX, maxY);
     }
 
@@ -135,7 +134,7 @@ public class RTree<T extends Node2D> {
      * @param maxY the maximum y component of the data
      * @return the leaf nodes in the given range
      */
-    public Collection<? extends T> search(final Collection<T> out, double minX, double minY, double maxX, double maxY) {
+    public Collection<? extends T> search(final Collection<T> out, float minX, float minY, float maxX, float maxY) {
         return traversal.search(root, out, minX, minY, maxX, maxY);
     }
 
@@ -204,7 +203,7 @@ public class RTree<T extends Node2D> {
      * @return whether the node was correctly removed
      */
     @SuppressWarnings("unchecked")
-    public boolean remove(double minX, double minY, double maxX, double maxY, Predicate<T> equalsFn) {
+    public boolean remove(float minX, float minY, float maxX, float maxY, Predicate<T> equalsFn) {
         final Node2D[] path = new Node2D[root.height];
         Node2D node = this.root, parent = null;
         final int[] indices = new int[node.height];
@@ -434,28 +433,28 @@ public class RTree<T extends Node2D> {
     /**
      * @return the minimum x value in the tree
      */
-    public double getMinX() {
+    public float getMinX() {
         return root.minX;
     }
 
     /**
      * @return the minimum y value in the tree
      */
-    public double getMinY() {
+    public float getMinY() {
         return root.minY;
     }
 
     /**
      * @return the maximum x value in the tree
      */
-    public double getMaxX() {
+    public float getMaxX() {
         return root.maxX;
     }
 
     /**
      * @return the maximum y value in the tree
      */
-    public double getMaxY() {
+    public float getMaxY() {
         return root.maxY;
     }
 
@@ -527,14 +526,14 @@ public class RTree<T extends Node2D> {
             if (node.leaf || path.size() - 1 == level) {
                 break;
             }
-            double minArea = Double.POSITIVE_INFINITY;
-            double minEnlargement = Double.POSITIVE_INFINITY;
+            float minArea = Float.POSITIVE_INFINITY;
+            float minEnlargement = Float.POSITIVE_INFINITY;
             Node2D targetNode = null;
 
             for (int i = 0; i < node.children.size(); i++) {
                 Node2D child = node.children.get(i);
-                double area = child.calculateArea();
-                double enlargement = enlargedArea(bbox, child) - area;
+                float area = child.calculateArea();
+                float enlargement = enlargedArea(bbox, child) - area;
 
                 // choose entry with the least area enlargement
                 if (enlargement < minEnlargement) {
@@ -633,15 +632,15 @@ public class RTree<T extends Node2D> {
     private int chooseSplitIndex(Node2D node, int m, int M) {
         int index = -1;
         boolean foundIndex = false;
-        double minOverlap = Double.POSITIVE_INFINITY;
-        double minArea = Double.POSITIVE_INFINITY;
+        float minOverlap = Float.POSITIVE_INFINITY;
+        float minArea = Float.POSITIVE_INFINITY;
 
         for (int i = m; i <= M - m; ++i) {
             final Node2D bbox1 = distBBox(node, 0, i, null);
             final Node2D bbox2 = distBBox(node, i, M, null);
 
-            double overlap = intersectionArea(bbox1, bbox2);
-            double area = bbox1.calculateArea() + bbox2.calculateArea();
+            float overlap = intersectionArea(bbox1, bbox2);
+            float area = bbox1.calculateArea() + bbox2.calculateArea();
 
             // choose distribution with minimum overlap
             if (overlap < minOverlap) {
@@ -666,8 +665,8 @@ public class RTree<T extends Node2D> {
 
     // sorts node children by the best axis for split
     private void chooseSplitAxis(Node2D node, int m, int M) {
-        double xMargin = this.allDistMargin(node, m, M, Node2DImpl::compareMinX);
-        double yMargin = this.allDistMargin(node, m, M, Node2DImpl::compareMinY);
+        float xMargin = this.allDistMargin(node, m, M, Node2DImpl::compareMinX);
+        float yMargin = this.allDistMargin(node, m, M, Node2DImpl::compareMinY);
 
         // if total distributions margin value is minimal for x, sort by minX,
         // otherwise it's already sorted by minY
@@ -677,13 +676,13 @@ public class RTree<T extends Node2D> {
     }
 
     // total margin of all possible split distributions where each node is at least m full
-    private double allDistMargin(Node2D node, int m, int M, Comparator<Node2D> compare) {
+    private float allDistMargin(Node2D node, int m, int M, Comparator<Node2D> compare) {
 
         node.children.sort(compare);
 
         final Node2D leftBBox = distBBox(node, 0, m, null);
         final Node2D rightBBox = distBBox(node, M - m, M, null);
-        double margin = leftBBox.calculateHalfPerimeter() + rightBBox.calculateHalfPerimeter();
+        float margin = leftBBox.calculateHalfPerimeter() + rightBBox.calculateHalfPerimeter();
 
         for (int i = m; i < M - m; i++) {
             Node2D child = node.children.get(i);

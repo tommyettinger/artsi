@@ -11,7 +11,7 @@ public class PointNode<T> extends Node2D {
      * The data in the node
      */
     public T data;
-    final double x, y;
+    final float x, y;
 
     /**
      * Create a point data node
@@ -20,7 +20,7 @@ public class PointNode<T> extends Node2D {
      * @param y    the y component of the data
      * @param data the data
      */
-    public PointNode(double x, double y, T data) {
+    public PointNode(float x, float y, T data) {
         super();
         this.x = x;
         this.y = y;
@@ -28,32 +28,32 @@ public class PointNode<T> extends Node2D {
     }
 
     @Override
-    public double getMinX() {
+    public float getMinX() {
         return x;
     }
 
     @Override
-    public double getMinY() {
+    public float getMinY() {
         return y;
     }
 
     @Override
-    public final double getMaxX() {
+    public final float getMaxX() {
         return getMinX();
     }
 
     @Override
-    public final double getMaxY() {
+    public final float getMaxY() {
         return getMinY();
     }
 
     @Override
-    public final double getMidX() {
+    public final float getMidX() {
         return getMinX();
     }
 
     @Override
-    public final double getMidY() {
+    public final float getMidY() {
         return getMinY();
     }
 

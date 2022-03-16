@@ -10,7 +10,7 @@ public class RectangularNode<T> extends Node2DImpl {
      */
     public T data;
 
-    public RectangularNode(double minX, double minY, double maxX, double maxY, T data) {
+    public RectangularNode(float minX, float minY, float maxX, float maxY, T data) {
         super(minX, minY, maxX, maxY);
         this.data = data;
     }

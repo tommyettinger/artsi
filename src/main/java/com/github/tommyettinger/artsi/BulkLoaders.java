@@ -2,6 +2,7 @@ package com.github.tommyettinger.artsi;
 
 import com.github.tommyettinger.ds.ObjectList;
 import com.github.tommyettinger.ds.QuickSelect;
+import com.github.tommyettinger.ds.support.sort.ObjectComparators;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -55,7 +56,7 @@ final class BulkLoaders {
 
         // split the items into M mostly square tiles
 
-        int N2 = (int) Math.ceil((double) N / M);
+        int N2 = (int) Math.ceil((float) N / M);
         int N1 = (int) (N2 * Math.ceil(Math.sqrt(M)));
 
         QuickSelect.multiSelect(items, Node2DImpl::compareMinX, left, right, N1);
@@ -78,10 +79,10 @@ final class BulkLoaders {
 
     private static Node2DImpl SpaceFillingCurveSorted(int maxEntries, Node2D[] items, IntBinaryOperator curveFunction) {
 
-        double minX = Double.POSITIVE_INFINITY;
-        double minY = Double.POSITIVE_INFINITY;
-        double maxX = Double.NEGATIVE_INFINITY;
-        double maxY = Double.NEGATIVE_INFINITY;
+        float minX = Float.MAX_VALUE;
+        float minY = Float.MAX_VALUE;
+        float maxX = -Float.MAX_VALUE;
+        float maxY = -Float.MAX_VALUE;
 
         for (Node2D item : items) {
             minX = Math.min(minX, item.getMinX());
@@ -92,8 +93,8 @@ final class BulkLoaders {
         int[] indexValues = new int[items.length];
         int MAX_16_BIT = (1 << 16) - 1;
 
-        double width = maxX - minX;
-        double height = maxY - minY;
+        float width = maxX - minX;
+        float height = maxY - minY;
         for (int i = 0; i < items.length; ++i) {
             Node2D b = items[i];
             int x = (int) (MAX_16_BIT * ((b.getMinX() + b.getMaxX()) * .5 - minX) / width);
@@ -139,7 +140,7 @@ final class BulkLoaders {
      * @return the root node of this subtree
      */
     static Node2DImpl NearestXSorted(int minEntries, int maxEntries, Node2D[] items) {
-        QuickSelect.multiSelect(items, Comparator.comparingDouble(Node2D::getMidX), 0, items.length - 1, maxEntries);
+        QuickSelect.multiSelect(items, ObjectComparators.comparingFloat(Node2D::getMidX), 0, items.length - 1, maxEntries);
         return mergeUpwards(items, maxEntries, 2);
     }
 
@@ -156,16 +157,16 @@ final class BulkLoaders {
 
         final int N = items.length - 1;
 
-        final int N2 = (int) Math.ceil((double) N / maxEntries);
+        final int N2 = (int) Math.ceil((float) N / maxEntries);
         final int m = (int) Math.ceil(Math.sqrt(maxEntries));
         final int N1 = (N2 * m);
 
-        QuickSelect.multiSelect(items, Comparator.comparingDouble(Node2D::getMidX), 0, N, N1);
+        QuickSelect.multiSelect(items, ObjectComparators.comparingFloat(Node2D::getMidX), 0, N, N1);
 
         for (int i = 0; i <= N; i += N1) {
 
             final int right2 = Math.min(i + N1 - 1, N);
-            QuickSelect.multiSelect(items, Comparator.comparingDouble(Node2D::getMidY), i, right2, m);
+            QuickSelect.multiSelect(items, ObjectComparators.comparingFloat(Node2D::getMidY), i, right2, m);
         }
         return mergeUpwards(items, maxEntries, 1);
     }
@@ -187,7 +188,7 @@ final class BulkLoaders {
             return node;
         }
 
-        final Node2D[] merged = new Node2D[(int) Math.ceil((double) items.length / maxEntries)];
+        final Node2D[] merged = new Node2D[(int) Math.ceil((float) items.length / maxEntries)];
         for (int i = 0, j = 0; i < items.length; i += maxEntries) {
             final ObjectList<Node2D> children = new ObjectList<>(maxEntries);
             for (int k = 0; k < maxEntries; ++k) {
@@ -236,7 +237,7 @@ final class BulkLoaders {
      * @param <T>         the type of the data in the values
      */
     private static <T> void sort(int[] sortIndices, T[] values, int left, int right, int nodeSize) {
-        if (Math.floor((double) left / nodeSize) >= Math.floor((double) right / nodeSize)) {
+        if (Math.floor((float) left / nodeSize) >= Math.floor((float) right / nodeSize)) {
             return;
         }
         final int pivot = sortIndices[(left + right) >> 1];

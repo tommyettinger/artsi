@@ -49,38 +49,38 @@ public abstract class Node2D {
     /**
      * @return the minimum x component
      */
-    public abstract double getMinX();
+    public abstract float getMinX();
 
     /**
      * @return the minimum y component
      */
-    public abstract double getMinY();
+    public abstract float getMinY();
 
     /**
      * @return the center x component
      * @implNote note final so that point data can avoid having to do unnecessary calculations
      */
-    public double getMidX() {
-        return (getMaxX() + getMinX()) * .5;
+    public float getMidX() {
+        return (getMaxX() + getMinX()) * .5f;
     }
 
     /**
      * @return the center y component
      * @implNote note final so that point data can avoid having to do unnecessary calculations
      */
-    public double getMidY() {
-        return (getMaxY() + getMinY()) * .5;
+    public float getMidY() {
+        return (getMaxY() + getMinY()) * .5f;
     }
 
     /**
      * @return the maximum x component
      */
-    public abstract double getMaxX();
+    public abstract float getMaxX();
 
     /**
      * @return the maximum y component
      */
-    public abstract double getMaxY();
+    public abstract float getMaxY();
 
     /**
      * @param minX the minimum x component
@@ -89,7 +89,7 @@ public abstract class Node2D {
      * @param maxY the maximum y component
      * @return whether this node contains a rectangle defined by its extends
      */
-    public boolean contains(double minX, double minY, double maxX, double maxY) {
+    public boolean contains(float minX, float minY, float maxX, float maxY) {
         return Node2DImpl.contains(this, minX, minY, maxX, maxY);
     }
 
@@ -100,7 +100,7 @@ public abstract class Node2D {
      * @param maxY the maximum y component
      * @return whether this node is contained within a rectangle defined by its extends
      */
-    public boolean isContainedIn(double minX, double minY, double maxX, double maxY) {
+    public boolean isContainedIn(float minX, float minY, float maxX, float maxY) {
         return Node2DImpl.contains(minX, minY, maxX, maxY, this);
     }
 
@@ -111,7 +111,7 @@ public abstract class Node2D {
      * @param maxY the maximum y component
      * @return whether this node intersects a rectangle defined by its extends
      */
-    public boolean intersects(double minX, double minY, double maxX, double maxY) {
+    public boolean intersects(float minX, float minY, float maxX, float maxY) {
         return Node2DImpl.intersects(minX, minY, maxX, maxY, this);
     }
 
@@ -119,19 +119,19 @@ public abstract class Node2D {
         distBBox(this, 0, children.size(), this);
     }
 
-    double calculateWidth() {
+    float calculateWidth() {
         return getMaxX() - getMinX();
     }
 
-    double calculateHeight() {
+    float calculateHeight() {
         return getMaxY() - getMinY();
     }
 
-    double calculateArea() {
+    float calculateArea() {
         return calculateWidth() * calculateHeight();
     }
 
-    double calculateHalfPerimeter() {
+    float calculateHalfPerimeter() {
         return calculateWidth() + calculateHeight();
     }
 
@@ -146,15 +146,15 @@ public abstract class Node2D {
         if (this == o) return true;
         if (!(o instanceof Node2D)) return false;
         Node2D node = (Node2D) o;
-        return Double.compare(node.getMinX(), getMinX()) == 0 && Double.compare(node.getMinY(), getMinY()) == 0 && Double.compare(node.getMaxX(), getMaxX()) == 0 && Double.compare(node.getMaxY(), getMaxY()) == 0;
+        return Float.compare(node.getMinX(), getMinX()) == 0 && Float.compare(node.getMinY(), getMinY()) == 0 && Float.compare(node.getMaxX(), getMaxX()) == 0 && Float.compare(node.getMaxY(), getMaxY()) == 0;
     }
 
     @Override
     public int hashCode() {
-        int h = BitConversion.doubleToMixedIntBits(getMinX()) * 31 * 31 * 31
-                + BitConversion.doubleToMixedIntBits(getMinY()) * 31 * 31
-                + BitConversion.doubleToMixedIntBits(getMaxX()) * 31
-                + BitConversion.doubleToMixedIntBits(getMaxY());
+        int h = BitConversion.floatToRawIntBits(getMinX()) * 31 * 31 * 31
+                + BitConversion.floatToRawIntBits(getMinY()) * 31 * 31
+                + BitConversion.floatToRawIntBits(getMaxX()) * 31
+                + BitConversion.floatToRawIntBits(getMaxY());
         return h ^ h >>> 16;
     }
 
@@ -164,10 +164,10 @@ public abstract class Node2D {
             destNode = new Node2DImpl((ObjectList<Node2D>) null);
         }
         destNode.set(
-                Double.POSITIVE_INFINITY,
-                Double.POSITIVE_INFINITY,
-                Double.NEGATIVE_INFINITY,
-                Double.NEGATIVE_INFINITY
+                Float.POSITIVE_INFINITY,
+                Float.POSITIVE_INFINITY,
+                Float.NEGATIVE_INFINITY,
+                Float.NEGATIVE_INFINITY
         );
 
         for (int i = k; i < p; i++) {
@@ -202,7 +202,7 @@ public abstract class Node2D {
      * @param maxY the maximum y component of the data
      * @implNote this must be implemented by other internal nodes to allow for unions with other nodes
      */
-    void set(double minX, double minY, double maxX, double maxY) {
+    void set(float minX, float minY, float maxX, float maxY) {
 
     }
 }

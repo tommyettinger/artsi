@@ -1,8 +1,9 @@
 package com.github.tommyettinger.artsi;
 
+import com.github.tommyettinger.ds.support.BitConversion;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * A 2D node that can be inserted into a 2D spatial tree
@@ -139,7 +140,8 @@ public abstract class Node2D {
 
     @Override
     public String toString() {
-        return String.format("Node {minX: %s, minY: %s, maxX: %s, maxY: %s, %s: %s}", getMinX(), getMinY(), getMaxX(), getMaxY(), leaf ? "data" : "numChildren", leaf ? "" : children.size());
+        return "Node {minX: " + getMinX() + ", minY: " + getMinY() + ", maxX: " + getMaxX() + ", maxY: " + getMaxY()
+                + (leaf ? ", data}" : ", numChildren: " + children.size() + "}");
     }
 
     @Override
@@ -152,10 +154,11 @@ public abstract class Node2D {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getMinX(),
-                getMinY(),
-                getMaxX(),
-                getMaxY());
+        int h = BitConversion.doubleToMixedIntBits(getMinX()) * 31 * 31 * 31
+                + BitConversion.doubleToMixedIntBits(getMinY()) * 31 * 31
+                + BitConversion.doubleToMixedIntBits(getMaxX()) * 31
+                + BitConversion.doubleToMixedIntBits(getMaxY());
+        return h ^ h >>> 16;
     }
 
     // min bounding rectangle of node children from k to p-1

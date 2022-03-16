@@ -453,7 +453,8 @@ public class RTree<T extends Node2D> {
 
     @Override
     public String toString() {
-        return String.format("RTree containing %d node%s {min: {x: %s, y: %s}, max: {x: %s, y: %s}}", size(), size() == 1 ? ((char)0) : 's', root.minX, root.minY, root.maxX, root.maxY);
+        return "RTree containing " + size() + (size() == 1 ? " node {min: {x: " :  " nodes {min: {x: ")
+                + root.minX + ", y: " + root.minY + "}, max: {x: " + root.maxX + ", y: " + root.maxY + "}}";
     }
 
     /**

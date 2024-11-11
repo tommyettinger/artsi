@@ -2,9 +2,12 @@ package com.github.tommyettinger.artsi;
 
 import com.github.tommyettinger.ds.ObjectDeque;
 import com.github.tommyettinger.ds.ObjectList;
+import com.github.tommyettinger.function.ObjPredicate;
 
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 import static com.github.tommyettinger.artsi.Node2D.distBBox;
 import static com.github.tommyettinger.artsi.Node2D.union;
@@ -36,7 +39,7 @@ public class RTree<T extends Node2D> {
         }
 
         @Override
-        public boolean remove(float minX, float minY, float maxX, float maxY, Predicate<T> equalsFn) {
+        public boolean remove(float minX, float minY, float maxX, float maxY, ObjPredicate<T> equalsFn) {
             return false;
         }
 
@@ -137,11 +140,11 @@ public class RTree<T extends Node2D> {
     /**
      * Traverse the tree
      *
-     * @param nodePredicate the test to see if traversal should continue down the tree
+     * @param nodeObjPredicate the test to see if traversal should continue down the tree
      * @param leafFunction  the test to see if the leaf is acceptable, if so, stop the traversal
      */
-    public void traverse(Predicate<Node2D> nodePredicate, Predicate<T> leafFunction) {
-        traversal.traverse(root, nodePredicate, leafFunction);
+    public void traverse(ObjPredicate<Node2D> nodeObjPredicate, ObjPredicate<T> leafFunction) {
+        traversal.traverse(root, nodeObjPredicate, leafFunction);
     }
 
     /**
@@ -199,7 +202,7 @@ public class RTree<T extends Node2D> {
      * @return whether the node was correctly removed
      */
     @SuppressWarnings("unchecked")
-    public boolean remove(float minX, float minY, float maxX, float maxY, Predicate<T> equalsFn) {
+    public boolean remove(float minX, float minY, float maxX, float maxY, ObjPredicate<T> equalsFn) {
         final Node2D[] path = new Node2D[root.height];
         Node2D node = this.root, parent = null;
         final int[] indices = new int[node.height];
@@ -257,14 +260,14 @@ public class RTree<T extends Node2D> {
     /**
      * Traverse through the tree until a match is found
      *
-     * @param nodePredicate the function to apply to internal nodes
+     * @param nodeObjPredicate the function to apply to internal nodes
      * @param leafFunction  the function to apply to leaf nodes
      * @return the matching leaf node
      */
     @SuppressWarnings("unchecked")
-    public T findAny(Predicate<Node2D> nodePredicate, Predicate<T> leafFunction) {
+    public T findAny(ObjPredicate<Node2D> nodeObjPredicate, ObjPredicate<T> leafFunction) {
         final Object[] out = new Object[1];
-        traverse(nodePredicate, l -> {
+        traverse(nodeObjPredicate, l -> {
             if (leafFunction.test(l)) {
                 out[0] = l;
                 //return true to terminate
@@ -279,25 +282,25 @@ public class RTree<T extends Node2D> {
     /**
      * Traverse through the tree until all matching leaves are found
      *
-     * @param nodePredicate the function to apply to internal nodes
+     * @param nodeObjPredicate the function to apply to internal nodes
      * @param leafFunction  the function to apply to leaf nodes
      * @return an iterable of the matching data (these will most likely be {@link ObjectDeque})
      */
-    public ObjectDeque<? extends T> findAll(Predicate<Node2D> nodePredicate, Predicate<T> leafFunction) {
-        return findAll(new ObjectDeque<>(), nodePredicate, leafFunction);
+    public ObjectDeque<? extends T> findAll(ObjPredicate<Node2D> nodeObjPredicate, ObjPredicate<T> leafFunction) {
+        return findAll(new ObjectDeque<>(), nodeObjPredicate, leafFunction);
     }
 
     /**
      * Traverse through the tree until all matching leaves are found
      *
      * @param out           the output collection
-     * @param nodePredicate the function to apply to internal nodes
+     * @param nodeObjPredicate the function to apply to internal nodes
      * @param leafFunction  the function to apply to leaf nodes
      * @param <S>           the type of the collection
      * @return an iterable of the matching data (these will most likely be {@link ObjectDeque})
      */
-    public <S extends Collection<T>> S findAll(S out, Predicate<Node2D> nodePredicate, Predicate<T> leafFunction) {
-        traverse(nodePredicate, l -> {
+    public <S extends Collection<T>> S findAll(S out, ObjPredicate<Node2D> nodeObjPredicate, ObjPredicate<T> leafFunction) {
+        traverse(nodeObjPredicate, l -> {
             if (leafFunction.test(l)) {
                 out.add(l);
             }
@@ -310,15 +313,15 @@ public class RTree<T extends Node2D> {
     /**
      * Traverse through the tree until the "minimum" match is found (as defined by a comparator)
      *
-     * @param nodePredicate the function to apply to internal nodes
+     * @param nodeObjPredicate the function to apply to internal nodes
      * @param leafFunction  the function to apply to leaf nodes
      * @param sort          the comparator used to sort the data
      * @return the T item that sorts as having the lowest value, or null if no leaf nodes were accepted
      */
     @SuppressWarnings("unchecked")
-    public T findNearest(Predicate<Node2D> nodePredicate, Predicate<Node2D> leafFunction, Comparator<T> sort) {
+    public T findNearest(ObjPredicate<Node2D> nodeObjPredicate, ObjPredicate<Node2D> leafFunction, Comparator<T> sort) {
         final Object[] out = new Object[1];
-        traverse(nodePredicate, l -> {
+        traverse(nodeObjPredicate, l -> {
             if (leafFunction.test(l)) {
                 if (out[0] == null || sort.compare((T) out[0], l) > 0) {
                     out[0] = l;
@@ -333,15 +336,15 @@ public class RTree<T extends Node2D> {
     /**
      * Traverse through the tree until the "maximum" match is found (as defined be a comparator)
      *
-     * @param nodePredicate the function to apply to internal nodes
+     * @param nodeObjPredicate the function to apply to internal nodes
      * @param leafFunction  the function to apply to leaf nodes
      * @param sort          the comparator used to sort the data
      * @return the T item that sorts as having the highest value, or null if no leaf nodes were accepted
      */
     @SuppressWarnings("unchecked")
-    public T findFurthest(Predicate<Node2D> nodePredicate, Predicate<T> leafFunction, Comparator<T> sort) {
+    public T findFurthest(ObjPredicate<Node2D> nodeObjPredicate, ObjPredicate<T> leafFunction, Comparator<T> sort) {
         final Object[] out = new Object[1];
-        traverse(nodePredicate, l -> {
+        traverse(nodeObjPredicate, l -> {
             if (leafFunction.test(l)) {
                 if (out[0] == null || sort.compare((T) out[0], l) < 0) {
                     out[0] = l;

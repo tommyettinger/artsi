@@ -1,14 +1,14 @@
 package com.github.tommyettinger.artsi;
 
 import com.github.tommyettinger.ds.ObjectList;
-import com.github.tommyettinger.ds.support.TrimRandom;
+import com.github.tommyettinger.random.AceRandom;
 
 import java.util.Comparator;
 
 public class BasicTests {
     public static void main(String[] args) {
         RTree<PointNode<String>> nameTree = new RTree<>(TreeTraversal.NON_RECURSIVE, 4);
-        TrimRandom random = new TrimRandom(12345L);
+        AceRandom random = new AceRandom(12345L);
         String[] words = {"anteater", "bee", "cat", "dog", "elephant", "frog", "gibbon", "horse", "ibex", "jaguar", "koala", "lemur", "mouse", "nuthatch", "owl", "penguin", "quahog", "ram", "squirrel", "thrush"};
         for(String w : words){
             nameTree.put(new PointNode<>(random.nextExclusiveFloat(), random.nextExclusiveFloat(), w));
@@ -23,7 +23,7 @@ public class BasicTests {
                     );
         };
         PointNode<String> best = nameTree.findNearest((n) -> true, (n) -> true, nearestToTarget);
-        System.out.println(best.data + " at " + best.getMidX() + ", " + best.getMidY());
+        System.out.println("Best is " + best.data + " at " + best.getMidX() + ", " + best.getMidY());
         ObjectList<PointNode<String>> listing = new ObjectList<>(words.length);
         nameTree.getLeaves(listing);
         listing.sort(nearestToTarget);

@@ -3,7 +3,7 @@ package com.github.tommyettinger.artsi;
 /**
  * Utility class for working with space filling curves. All implementations are for 16-bit integers
  * <p>
- * Much of the code is from https://github.com/rawrunprotected/hilbert_curves.
+ * Much of the code is from <a href="https://github.com/rawrunprotected/hilbert_curves">rawrunprotected's repo</a>.
  * <p>
  * Decoding the curves can either be performed using the {@link #decodeHilbert} or {@link #decodePackedHilbert} methods. The advantage
  * of the former is that it avoids having to create an array, instead packing the value in an int. This can then be

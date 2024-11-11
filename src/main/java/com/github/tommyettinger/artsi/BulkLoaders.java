@@ -3,11 +3,9 @@ package com.github.tommyettinger.artsi;
 import com.github.tommyettinger.ds.ObjectList;
 import com.github.tommyettinger.ds.QuickSelect;
 import com.github.tommyettinger.ds.support.sort.ObjectComparators;
+import com.github.tommyettinger.function.IntIntToIntBiFunction;
 
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.function.IntBinaryOperator;
 
 /**
  * The actual implementation of bulk loaders
@@ -77,7 +75,7 @@ final class BulkLoaders {
 
     }
 
-    private static Node2DImpl SpaceFillingCurveSorted(int maxEntries, Node2D[] items, IntBinaryOperator curveFunction) {
+    private static Node2DImpl SpaceFillingCurveSorted(int maxEntries, Node2D[] items, IntIntToIntBiFunction curveFunction) {
 
         float minX = Float.MAX_VALUE;
         float minY = Float.MAX_VALUE;

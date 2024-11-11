@@ -1,9 +1,7 @@
 package com.github.tommyettinger.artsi;
 
 import com.github.tommyettinger.ds.ObjectList;
-import com.github.tommyettinger.ds.support.BitConversion;
-
-import java.util.List;
+import com.github.tommyettinger.digital.BitConversion;
 
 /**
  * A 2D node that can be inserted into a 2D spatial tree

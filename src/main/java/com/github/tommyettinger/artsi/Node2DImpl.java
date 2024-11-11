@@ -2,8 +2,6 @@ package com.github.tommyettinger.artsi;
 
 import com.github.tommyettinger.ds.ObjectList;
 
-import java.util.List;
-
 /**
  * An internal rectangular node
  */

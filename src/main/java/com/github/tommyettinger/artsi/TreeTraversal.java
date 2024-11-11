@@ -1,10 +1,10 @@
 package com.github.tommyettinger.artsi;
 
 import com.github.tommyettinger.ds.ObjectDeque;
+import com.github.tommyettinger.function.ObjPredicate;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Traversal mode for RTree
@@ -73,7 +73,7 @@ public abstract class TreeTraversal {
         }
 
         @SuppressWarnings("unchecked")
-        private <T extends Node2D> void traverse0(Predicate<Node2D> nodePredicate, Predicate<T> leafFunction, Node2D node) {
+        private <T extends Node2D> void traverse0(ObjPredicate<Node2D> nodePredicate, ObjPredicate<T> leafFunction, Node2D node) {
             if (node == null) {
                 return;
             }
@@ -89,7 +89,7 @@ public abstract class TreeTraversal {
         }
 
         @Override
-        <T extends Node2D> void traverse(Node2D root, Predicate<Node2D> nodePredicate, Predicate<T> leafFunction) {
+        <T extends Node2D> void traverse(Node2D root, ObjPredicate<Node2D> nodePredicate, ObjPredicate<T> leafFunction) {
             traverse0(nodePredicate, leafFunction, root);
 
         }
@@ -164,7 +164,7 @@ public abstract class TreeTraversal {
 
         @Override
         @SuppressWarnings("unchecked")
-        <T extends Node2D> void traverse(Node2D root, Predicate<Node2D> nodePredicate, Predicate<T> leafPredicate) {
+        <T extends Node2D> void traverse(Node2D root, ObjPredicate<Node2D> nodePredicate, ObjPredicate<T> leafPredicate) {
             final ObjectDeque<Node2D> nodesToSearch = new ObjectDeque<>();
             nodesToSearch.add(root);
             while (!nodesToSearch.isEmpty()) {
@@ -209,7 +209,7 @@ public abstract class TreeTraversal {
 
     abstract boolean collides(Node2D root, float minX, float minY, float maxX, float maxY);
 
-    abstract <T extends Node2D> void traverse(Node2D root, Predicate<Node2D> nodePredicate, Predicate<T> leafPredicate);
+    abstract <T extends Node2D> void traverse(Node2D root, ObjPredicate<Node2D> nodePredicate, ObjPredicate<T> leafPredicate);
 
     abstract <T extends Node2D, S extends Collection<T>> S search(Node2D root, S out, float minX, float minY, float maxX, float maxY);
 
